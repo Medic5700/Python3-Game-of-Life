@@ -7,15 +7,17 @@ mapX = 64
 mapY = 32
 timeout = 512 # -1 for infinit
 
-#map generation
-gameMap = [[(False) for x in range(mapX)] for y in range(mapY)]
-delta = [[(False) for x in range(mapX)] for y in range(mapY)]
-for y in range(mapY):
-    for x in range(mapX):
-        if random.randint(0,7) <= 3:
-            gameMap[y][x] = True
+def generateMap():
+    """Generates the map, returns a two dimensional array of True or False"""
+    gameMap = [[(False) for x in range(mapX)] for y in range(mapY)]
+    for y in range(mapY):
+        for x in range(mapX):
+            if random.randint(0,7) <= 3:
+                gameMap[y][x] = True
+    return gameMap
             
-def printScreen(gameMap):
+def strScreen(gameMap):
+    """Takes the gameMap, returns string representing gameMap"""
     temp = ""
     for y in range(mapY):
         for x in range(mapX):
@@ -24,9 +26,10 @@ def printScreen(gameMap):
             else:
                 temp += "1"
         temp += "\n"
-    print(temp)
+    return temp
 
 def rules(gameMap):
+    """Takes the gameMap, returns gameMap iterated one step"""
     t1 = [[(0) for x in range(mapX)] for y in range(mapY)]
     
     for y in range(mapY):
@@ -55,29 +58,21 @@ def rules(gameMap):
         for x in range(mapX):
             if gameMap[y][x] == False:
                 if t1[y][x] == 3:
-                    delta[y][x] = True
+                    gameMap[y][x] = True
                 else:
-                    delta[y][x] = False
+                    gameMap[y][x] = False
             if gameMap[y][x] == True:
                 if t1[y][x] < 2 or t1[y][x] > 3:
-                    delta[y][x] = False
+                    gameMap[y][x] = False
                 else:
-                    delta[y][x] = True
-    
-    return delta
-                
-def toLife(gameMap):
-    for y in range(mapY):
-        for x in range(mapX):
-            if gameMap[y][x] == False and random.randint(0,63) <= 0:
-                gameMap[y][x] = True
+                    gameMap[y][x] = True
     return gameMap
 
-t = 0
-while(t == timeout):
-    printScreen(gameMap)
-    gameMap = rules(gameMap)
-    #gameMap = toLife(gameMap)
-    time.sleep(0.1)
-    t += 1
-    
+if __name__ == "__main__":
+    gameMap = generateMap()
+    step = 0
+    while(step != timeout):
+        print(strScreen(gameMap))
+        gameMap = rules(gameMap)
+        time.sleep(0.1)
+        step += 1
