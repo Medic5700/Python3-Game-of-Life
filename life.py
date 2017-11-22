@@ -47,7 +47,7 @@ def iterate(gameMap):
 if __name__ == "__main__":
     gameMap = generateMap()
     while(timeout != 0):
-        print(strScreen(gameMap))
+        print(strScreen(gameMap) + "\n" + str(timeout), end='')
         gameMap = iterate(gameMap)
         time.sleep(0.1)
         timeout += -1
