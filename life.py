@@ -1,10 +1,13 @@
-import random
-import time
+''' Game of Life in Python3
+By: Medic5700 '''
 
-#settings
+import random #for initial map generation
+import time #for limiting frames per second
+
+#global game settings
 mapX = 80
 mapY = 20
-timeout = 512 # max run time in steps, -1 for infinite runtime
+timeout = 1024 #max run time in steps, -1 for infinite runtime
 
 def generateMap():
     """Generates the map, returns a two dimensional array of True or False"""
@@ -16,13 +19,13 @@ def generateMap():
     return gameMap
 
 def strScreen(gameMap):
-    """Takes the gameMap, returns string representing gameMap"""
-    temp = ""
+    """Takes the gameMap, returns string representing gameMap for display"""
+    result = ""
     for y in range(mapY):
-        temp += "\n"
+        result += "\n"
         for x in range(mapX):
-            temp += ('-' if (gameMap[y][x] == False) else '8')
-    return temp
+            result += ('-' if (gameMap[y][x] == False) else '0')
+    return result
 
 def iterate(gameMap):
     """Takes the gameMap, returns gameMap iterated one step"""
@@ -30,13 +33,13 @@ def iterate(gameMap):
     
     for y in range(mapY):
         for x in range(mapX):
-            t = [0, 1, 1, 1, 0, -1, -1, -1] #checks 8 adjacent cells
-            for i in range(8):
-                if gameMap[(t[(i+2)%8]+y) % mapY][(t[(i+0)%8]+x) % mapX] == True:
+            t = [0, 1, 1, 1, 0, -1, -1, -1, 0, 1] #repeating pattern of period 8
+            for i in range(8): #checks 8 adjacent cells
+                if gameMap[(t[i+2] + y) % mapY][(t[i] + x) % mapX] == True:
                     neighbors[y][x] += 1
     
     for y in range(mapY):
-        for x in range(mapX):
+        for x in range(mapX): #applies game rules to gameMap
             if (gameMap[y][x] == False) and (neighbors[y][x] == 3):
                 gameMap[y][x] = True
             elif (gameMap[y][x] == True) and (neighbors[y][x] < 2 or neighbors[y][x] > 3):
