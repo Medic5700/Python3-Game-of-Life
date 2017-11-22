@@ -39,7 +39,7 @@ def iterate(gameMap):
         for x in range(mapX):
             if (gameMap[y][x] == False) and (neighbors[y][x] == 3):
                 gameMap[y][x] = True
-            if (gameMap[y][x] == True) and (neighbors[y][x] < 2 or neighbors[y][x] > 3):
+            elif (gameMap[y][x] == True) and (neighbors[y][x] < 2 or neighbors[y][x] > 3):
                 gameMap[y][x] = False
     
     return gameMap
