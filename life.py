@@ -1,11 +1,10 @@
 import random
-import math
 import time
 
 #settings
-mapX = 64
-mapY = 32
-timeout = 512 # -1 for infinit
+mapX = 80
+mapY = 20
+timeout = 512 # max run time in steps, -1 for infinite runtime
 
 def generateMap():
     """Generates the map, returns a two dimensional array of True or False"""
@@ -15,17 +14,14 @@ def generateMap():
             if random.randint(0,7) <= 3:
                 gameMap[y][x] = True
     return gameMap
-            
+
 def strScreen(gameMap):
     """Takes the gameMap, returns string representing gameMap"""
     temp = ""
     for y in range(mapY):
-        for x in range(mapX):
-            if gameMap[y][x] == False:
-                temp += "0"
-            else:
-                temp += "1"
         temp += "\n"
+        for x in range(mapX):
+            temp += ('-' if (gameMap[y][x] == False) else '8')
     return temp
 
 def iterate(gameMap):
@@ -34,12 +30,10 @@ def iterate(gameMap):
     
     for y in range(mapY):
         for x in range(mapX):
-            temp = 0
-            t = [0, 1, 1, 1, 0, -1, -1, -1]
+            t = [0, 1, 1, 1, 0, -1, -1, -1] #checks 8 adjacent cells
             for i in range(8):
                 if gameMap[(t[(i+2)%8]+y) % mapY][(t[(i+0)%8]+x) % mapX] == True:
-                    temp += 1
-            neighbors[y][x] = temp
+                    neighbors[y][x] += 1
     
     for y in range(mapY):
         for x in range(mapX):
@@ -47,13 +41,13 @@ def iterate(gameMap):
                 gameMap[y][x] = True
             if (gameMap[y][x] == True) and (neighbors[y][x] < 2 or neighbors[y][x] > 3):
                 gameMap[y][x] = False
+    
     return gameMap
 
 if __name__ == "__main__":
     gameMap = generateMap()
-    step = 0
-    while(step != timeout):
+    while(timeout != 0):
         print(strScreen(gameMap))
         gameMap = iterate(gameMap)
         time.sleep(0.1)
-        step += 1
+        timeout += -1
