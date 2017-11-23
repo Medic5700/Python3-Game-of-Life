@@ -1,28 +1,31 @@
 ''' Game of Life in Python3
-By: Medic5700 '''
+By: Medic5700 
 
-import random #for initial map generation
-import time #for limiting frames per second
+Generates a random map, and interates over that map. 
+It's relativly simple, with interface other then the map display. '''
+
+import random #used for initial map generation
+import time #used for limiting frames per second
 
 #global game settings
-mapX = 80
-mapY = 20
+mapX = 80 #map width
+mapY = 20 #map height
 timeout = 1024 #max run time in steps, -1 for infinite runtime
 
 def generateMap():
-    """Generates the map, returns a two dimensional array of True or False"""
+    """Generates random map, returns a two dimensional array of True or False"""
     gameMap = [[(False) for x in range(mapX)] for y in range(mapY)]
     for y in range(mapY):
-        for x in range(mapX):
+        for x in range(mapX): #nested array is always the x (horizontal) line
             if random.randint(0,7) <= 3:
                 gameMap[y][x] = True
     return gameMap
 
 def strScreen(gameMap):
-    """Takes the gameMap, returns string representing gameMap for display"""
+    """Takes the gameMap, returns string representing gameMap for print()"""
     result = ""
     for y in range(mapY):
-        result += "\n"
+        result += "\n" #newline here because it meshes with previous frame better
         for x in range(mapX):
             result += ('-' if (gameMap[y][x] == False) else '0')
     return result
@@ -39,7 +42,7 @@ def iterate(gameMap):
                     neighbors[y][x] += 1
     
     for y in range(mapY):
-        for x in range(mapX): #applies game rules to gameMap
+        for x in range(mapX): #applies game rules to gameMap for each cell
             if (gameMap[y][x] == False) and (neighbors[y][x] == 3):
                 gameMap[y][x] = True
             elif (gameMap[y][x] == True) and (neighbors[y][x] < 2 or neighbors[y][x] > 3):
