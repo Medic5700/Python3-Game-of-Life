@@ -1,8 +1,10 @@
 ''' Game of Life in Python3
 By: Medic5700 
 
-Generates a random map, and interates over that map. 
-It's relativly simple, with interface other then the map display. '''
+Generates a random map, and iterates over that map. 
+It is relatively simple, with no interface other then the map display. 
+Relative Stats Comparison = CPU 5/5; MEM 5/5; Readability 4/5; Security N/A; Interface 2/5; Scaleability 4/5; Robustness 5/5; Complexity 3/5;
+'''
 
 import random #used for initial map generation
 import time #used for limiting frames per second
@@ -14,6 +16,7 @@ timeout = 1024 #max run time in steps, -1 for infinite runtime
 
 def generateMap(width, height):
     """takes dimensions, Generates random map, returns a two dimensional array of True or False"""
+    assert (width > 0) and (height > 0)
     gameMap = [[(False) for x in range(width)] for y in range(height)]
     for y in range(height):
         for x in range(width): #nested array is always the x (horizontal) line
@@ -25,7 +28,7 @@ def strScreen(gameMap):
     """Takes the gameMap, returns string representing gameMap for print()"""
     result = ""
     for y in range(len(gameMap)):
-        result += "\n" #newline here because it meshes with previous frame better
+        result += "\n" #newline here because it meshes with previous 'frame' better
         for x in range(len(gameMap[0])):
             result += ('-' if (gameMap[y][x] == False) else '0')
     return result
@@ -37,7 +40,7 @@ def iterate(gameMap):
     for y in range(len(gameMap)):
         for x in range(len(gameMap[0])):
             t = [0, 1, 1, 1, 0, -1, -1, -1, 0, 1] #repeating pattern of period 8
-            for i in range(8): #checks 8 adjacent cells
+            for i in range(8): #checks 8 adjacent cells, including map wrap-around
                 if gameMap[(t[i+2] + y) % len(gameMap)][(t[i] + x) % len(gameMap[0])] == True:
                     neighbors[y][x] += 1
     
@@ -51,8 +54,8 @@ def iterate(gameMap):
     return gameMap
 
 if __name__ == "__main__":
-    gameMap = generateMap(mapX, mapY)
-    while(timeout != 0):
+    gameMap = generateMap(mapX, mapY) #init
+    while(timeout != 0): #uses old '-1' for infinity trick on purpose
         print(strScreen(gameMap) + "\n" + str(timeout), end='')
         gameMap = iterate(gameMap)
         time.sleep(0.1)
